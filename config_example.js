@@ -28,6 +28,10 @@ define([], function() {
     checks: {
       checkGroup1 : ['artifact1', 'artifact2'],
       checkGroup2 : ['artifact3', 'artifact4']
+    },
+    result: {
+      path: 'results',
+      filename: 'table.html'
     }
   };
 

@@ -17,7 +17,7 @@ define([
         return dependencyAnalyzerService.analyze(config.checks, dependencies);
       }).
       then(function(dependencies){
-        return render.render(config.checks, dependencies, config.preferedPackage);
+        return render.render(config.checks, dependencies, config.preferedPackage, config.result);
       }).
       fail(function(error) {
         console.log(error);

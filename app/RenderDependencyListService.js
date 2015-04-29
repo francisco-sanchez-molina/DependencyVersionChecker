@@ -54,7 +54,7 @@ define([
     };
 
     function compare(package) {
-      return function (a, b) {
+      return function(a, b) {
         if (a.indexOf(package) === 0 && b.indexOf(package) === -1) {
           return -1;
         }
@@ -108,7 +108,24 @@ define([
       return '<table class="dependencyTable">' + createHeader(columns) + createBody(columns, content, preferedPackage) + '</table>';
     };
 
-    namespace.render = function(tableStructure, content, preferedPackage) {
+    var writeResult = function(table, destination) {
+      var fullPath = destination.path + '/' + destination.filename;
+
+      return cli.eval('mkdir -p ' + destination.path).
+      then(function() {
+        return cli.eval('cp app/css/style.css ' + destination.path);
+      }).
+      then(function() {
+        return files.write(fullPath, txt);
+      }).
+      then(function() {
+        console.log('Result write to ' + fullPath);
+      });
+
+
+    }
+
+    namespace.render = function(tableStructure, content, preferedPackage, destination) {
       var resultFile = './table.html';
       var txt;
       txt = getHeader();
@@ -118,8 +135,8 @@ define([
         txt += '</div>';
       });
       txt += closeHTML();
-      console.log('Result write to '+ resultFile);
-      return files.write(resultFile, txt);
+      return writeResult(txt, destination);
+
     };
 
     return namespace;
