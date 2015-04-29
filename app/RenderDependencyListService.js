@@ -94,7 +94,7 @@ define([
 
     var getHeader = function() {
       return '<!doctype html><head><meta charset="utf-8"><title>Dependency checker</title>' +
-        '<link rel="stylesheet" href="css/style.css"></head>' +
+        '<link rel="stylesheet" href="./style.css"></head>' +
         '<body>';
     };
 
@@ -116,7 +116,7 @@ define([
         return cli.eval('cp app/css/style.css ' + destination.path);
       }).
       then(function() {
-        return files.write(fullPath, txt);
+        return files.write(fullPath, table);
       }).
       then(function() {
         console.log('Result write to ' + fullPath);
