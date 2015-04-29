@@ -3,6 +3,6 @@
   "version": "0.1.0",
   "dependencies": {
     "q": "^1.2.0",
-    "requirejs": "^2.1.17",
+    "requirejs": "^2.1.17"
   }
 }
