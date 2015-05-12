@@ -11,18 +11,22 @@ requirejs.config({
     cli: 'app/lib/cliWrapper',
     mvn: 'app/lib/mvnWrapper',
     files: 'app/lib/fsWrapper',
+    Artifact: 'app/model/Artifact'
   }
 });
 
 requirejs([
     'config',
-    'DependencyChecker'
+    'DependencyChecker',
+    'q'
   ],
   function(
     config,
-    dependencyChecker
+    dependencyChecker,
+    q
   ) {
     console.log('Dependency checker v0.1.0');
 
+    q.longStackSupport = true;
     dependencyChecker.start(config);
   });

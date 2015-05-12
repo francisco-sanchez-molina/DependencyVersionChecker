@@ -25,7 +25,7 @@ define([], function() {
         path: 'repo4'
       }
     },
-    checks: {
+    modules: {
       checkGroup1 : ['artifact1', 'artifact2'],
       checkGroup2 : ['artifact3', 'artifact4']
     },

@@ -41,10 +41,10 @@ define([
       return q.all(promises);
     };
 
-    var mvnTreeArtifacts = function(basePath, checks, poms) {
+    var mvnTreeArtifacts = function(basePath, modules, poms) {
       var artifacts = [];
-      Object.keys(checks).forEach(function(checkName) {
-        checks[checkName].forEach(function(artifactName) {
+      Object.keys(modules).forEach(function(moduleName) {
+        modules[moduleName].forEach(function(artifactName) {
           if (artifacts.indexOf(artifactName) === -1) {
             artifacts.push(artifactName);
           }
@@ -65,23 +65,22 @@ define([
     };
 
 
-    var getArtifactsTableDependency = function(basePath, artifacts, poms) {
+    var getModulesTableDependency = function(basePath, subModules, poms) {
       var promises = [];
       var dependenciesTable = {};
-      artifacts.forEach(function(artifact) {
-        var mvnDepFile = basePath + '/' + poms[artifact].path + '/pom.dep';
+      subModules.forEach(function(subModule) {
+        var mvnDepFile = basePath + '/' + poms[subModule].path + '/pom.dep';
         var promise = files.read(mvnDepFile).
         then(function(mvnResult) {
-          return mvn.analyzeTree(mvnResult);
+          return mvn.parseDependencyTree(mvnResult);
         }).
         then(function(dependencies) {
-          return mvn.graphToTable(dependencies);
-        }).
-        then(function(table) {
-          Object.keys(table).forEach(function(dependencyName) {
-            var deps = dependenciesTable[dependencyName] || {};
-            deps[artifact] = table[dependencyName];
-            dependenciesTable[dependencyName] = deps;
+          dependencies.toList().forEach(function(dependency) {
+            var deps = dependenciesTable[dependency.getName()] || {};
+            var entry = deps[subModule] || [];
+            entry.push(dependency);
+            deps[subModule] = entry;
+            dependenciesTable[dependency.getName()] = deps;
           });
         });
         promises.push(promise);
@@ -104,16 +103,16 @@ define([
       }).
       then(function() {
         if (!config.skipMvnTree) {
-          return mvnTreeArtifacts(temporalPath, config.checks, config.poms);
+          return mvnTreeArtifacts(temporalPath, config.modules, config.poms);
         }
       }).
       then(function() {
         var promise = q.resolve();
-        Object.keys(config.checks).forEach(function(checkName) {
+        Object.keys(config.modules).forEach(function(moduleName) {
           promise = promise.then(function() {
-            return getArtifactsTableDependency(temporalPath, config.checks[checkName], config.poms);
+            return getModulesTableDependency(temporalPath, config.modules[moduleName], config.poms);
           }).then(function(dependencies) {
-            tables[checkName] = dependencies;
+            tables[moduleName] = dependencies;
           });
         });
         return promise;
