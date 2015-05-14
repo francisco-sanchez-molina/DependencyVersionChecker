@@ -62,6 +62,14 @@ define([
     this.dependencies.push(dependency);
   };
 
+
+  Artifact.prototype.forEach = function(callback) {
+    callback(this);
+    this.dependencies.forEach(function(artifact) {
+      callback(artifact);
+    });
+  };
+
   Artifact.prototype.toList = function() {
     var ret = [];
     ret.push(this);

@@ -1,6 +1,7 @@
 define([
     'q',
     'git',
+    'http',
     'mvn',
     'cli',
     'files'
@@ -8,6 +9,7 @@ define([
   function(
     q,
     git,
+    http,
     mvn,
     cli,
     files
@@ -29,14 +31,34 @@ define([
       });
     };
 
+    var extractFileFromHttpArchive = function(content, path, filename) {
+      var dst = path + '/' + filename;
+
+      return cli.eval('mkdir -p ' + path).
+      then(function() {
+        console.log('pom write to ' + dst);
+        return files.write(dst, content);
+      });
+
+    };
+
     var retrivePoms = function(basePath, poms) {
       var promises = [];
       Object.keys(poms).forEach(function(artifactName) {
-        var promise = git.archive(poms[artifactName].repo, poms[artifactName].pom).
-        then(function(content) {
-          return extractFileFromGitArchive(content, basePath + '/' + poms[artifactName].path, 'pom.xml');
-        });
-        promises.push(promise);
+        var promise;
+        if (poms[artifactName].repo) {
+          promise = git.archive(poms[artifactName].repo, poms[artifactName].pom).
+          then(function(content) {
+            return extractFileFromGitArchive(content, basePath + '/' + poms[artifactName].path, 'pom.xml');
+          });
+          promises.push(promise);
+        } else {
+          promise = http.archive(poms[artifactName].address).
+          then(function(content) {
+            return extractFileFromHttpArchive(content, basePath + '/' + poms[artifactName].path, 'pom.xml');
+          });
+          promises.push(promise);
+        }
       });
       return q.all(promises);
     };

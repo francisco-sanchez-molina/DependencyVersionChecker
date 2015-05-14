@@ -8,6 +8,7 @@ requirejs.config({
     RenderDependencyListService: 'app/RenderDependencyListService',
     DependencyAnalyzerService: 'app/DependencyAnalyzerService',
     git: 'app/lib/gitWrapper',
+    http: 'app/lib/httpWrapper',
     cli: 'app/lib/cliWrapper',
     mvn: 'app/lib/mvnWrapper',
     files: 'app/lib/fsWrapper',
