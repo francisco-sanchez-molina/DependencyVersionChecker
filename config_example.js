@@ -5,23 +5,27 @@ define([], function() {
     preferedPackage : 'org.example',
     poms: {
       artifact1: {
-        repo: 'ssh://git@github.com/repo1.git',
+        repo: 'ssh://git@gitexample.com/repo1.git',
         pom: 'pom.xml',
         path: 'repo1'
       },
       artifact2: {
-        repo: 'ssh://git@github.com/repo2.git',
+        repo: 'ssh://git@gitexample.com/repo2.git',
         pom: 'pom.xml',
         path: 'repo2'
       },
       artifact3: {
-        repo: 'ssh://git@github.com/repo3.git',
+        repo: 'ssh://git@gitexample.com/repo3.git',
         pom: 'pom.xml',
         path: 'repo3'
       },
       artifact4: {
-        repo: 'ssh://git@github.com/repo4.git',
+        repo: 'ssh://git@gitexample.com/repo4.git',
         pom: 'pom.xml',
+        path: 'repo4'
+      },
+      artifact5: {
+        address: 'http://httpServerExample.com/artifact5/pom.xml',
         path: 'repo4'
       }
     },
