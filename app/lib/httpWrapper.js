@@ -7,7 +7,7 @@ define([
   var namespace = {};
 
   namespace.archive = function(address) {
-    console.log('HTTP::ARCHIVE '+repo+' '+path);
+    console.log('HTTP::ARCHIVE '+address);
     return cli.eval('curl ' + address);
   };
 
