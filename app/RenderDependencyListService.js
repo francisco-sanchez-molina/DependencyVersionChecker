@@ -76,17 +76,19 @@ define([
       var txt = '';
       var cont = 0;
       Object.keys(content).sort(compare(preferedPackage)).forEach(function(artifact) {
-        txt += createRow(cont, columns, artifact, content[artifact]);
-        cont += 1;
+        if (artifact.indexOf('__')!==0) {
+          txt += createRow(cont, columns, artifact, content[artifact]);
+          cont += 1;
+        }
       });
       return txt;
     };
 
-    var createHeader = function(columns) {
+    var createHeader = function(artifactsName, artifactsDependencies) {
       var txt = '<tr class="header">';
       txt += '<td></td>';
-      columns.forEach(function(name) {
-        txt += '<th>' + name + '</th>';
+      artifactsName.forEach(function(name) {
+        txt += '<th>' + name + ' ' +artifactsDependencies[name].getVersion() + '</th>';
       });
       txt += '</tr>';
       return txt;
@@ -105,7 +107,7 @@ define([
 
 
     var createTable = function(columns, content, preferedPackage) {
-      return '<table class="dependencyTable">' + createHeader(columns) + createBody(columns, content, preferedPackage) + '</table>';
+      return '<table class="dependencyTable">' + createHeader(columns, content.__subModules) + createBody(columns, content, preferedPackage) + '</table>';
     };
 
     var writeResult = function(table, destination) {
@@ -123,7 +125,7 @@ define([
       });
 
 
-    }
+    };
 
     namespace.render = function(tableStructure, content, preferedPackage, destination) {
       var resultFile = './table.html';

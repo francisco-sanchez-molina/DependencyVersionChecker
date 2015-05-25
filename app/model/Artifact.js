@@ -66,17 +66,8 @@ define([
   Artifact.prototype.forEach = function(callback) {
     callback(this);
     this.dependencies.forEach(function(artifact) {
-      callback(artifact);
+      artifact.forEach(callback);
     });
-  };
-
-  Artifact.prototype.toList = function() {
-    var ret = [];
-    ret.push(this);
-    this.dependencies.forEach(function(artifact) {
-      ret = ret.concat(artifact.toList());
-    });
-    return ret;
   };
 
   return namespace;

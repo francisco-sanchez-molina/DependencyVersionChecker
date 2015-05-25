@@ -97,12 +97,18 @@ define([
           return mvn.parseDependencyTree(mvnResult);
         }).
         then(function(dependencies) {
-          dependencies.toList().forEach(function(dependency) {
-            var deps = dependenciesTable[dependency.getName()] || {};
-            var entry = deps[subModule] || [];
-            entry.push(dependency);
-            deps[subModule] = entry;
-            dependenciesTable[dependency.getName()] = deps;
+          dependencies.forEach(function(dependency) {
+            if (dependency.getScope()===undefined) {
+              console.log(dependency.getName());
+              dependenciesTable.__subModules = dependenciesTable.__subModules || {};
+              dependenciesTable.__subModules[subModule] = dependency;
+            } else {
+              var deps = dependenciesTable[dependency.getName()] || {};
+              var entry = deps[subModule] || [];
+              entry.push(dependency);
+              deps[subModule] = entry;
+              dependenciesTable[dependency.getName()] = deps;
+            }
           });
         });
         promises.push(promise);
